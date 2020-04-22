@@ -17,9 +17,9 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
+@app.route('/')
 def main():
-    db_session.global_init("db/blogs.sqlite")
+    # db_session.global_init("db/blogs.sqlite")
     # user = User()
     # user.name = "Пользователь 4"
     # user.about = "биография пользователя 4"
@@ -28,7 +28,7 @@ def main():
     # session.add(user)
     # session.commit()
     # чтобы добавить пользователя, достаточно раскомментировать этот код и закомментировать строчку выше
-    app.run()
+    return render_template('base.html')
 
 @login_manager.user_loader
 def load_user(user_id):
