@@ -1,7 +1,6 @@
 from django.shortcuts import redirect
 from flask import Flask, make_response, request, session, render_template
 from flask_login import LoginManager, login_user
-
 from data import db_session
 from data.users import User
 import datetime
@@ -14,11 +13,12 @@ from loginform import LoginForm
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 @app.route('/')
-def main():
+def index():
     # db_session.global_init("db/blogs.sqlite")
     # user = User()
     # user.name = "Пользователь 4"
@@ -76,4 +76,4 @@ def session_test():
     return f"Вы посетили данный сайт {session['visits_count']} раз"
 
 if __name__ == '__main__':
-    main()
+    app.run(port=8080, host='127.0.0.1')
