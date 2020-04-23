@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from flask import Flask, make_response, request, session, render_template, abort
+from flask import Flask, make_response, request, session, render_template, abort, jsonify, url_for
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from data import db_session
 from data.users import User
@@ -152,6 +152,47 @@ def cookie_test():
         res.set_cookie("visits_count", '1',
                        max_age=60)
     return res
+
+
+
+@app.route('/user_login', methods=['POST'])
+def user_login():
+    login = request.form['login']
+    if login is None or not login:
+        return jsonify(data='Incorrect URL')
+
+    try:
+        c, conn = cursor_connection()
+        c = conn.cursor()
+        c.execute("SELECT accounts_info_uid "
+                  "FROM auth_info WHERE login='{}' ".format(login))
+
+        id = c.fetchall()
+        if not id:
+            return jsonify(data='Incorrect login')
+
+        c.execute("SELECT * FROM boxes_id AS tb1 LEFT JOIN"
+                  " accounts_info AS tb2 ON tb2.boxes_ids=tb1.uid "
+                  # "LEFT JOIN electricity_info as tb3 ON tb3.boxes_id_uid=tb1.uid"
+                  " WHERE tb2.uid={} ".format(id[0][0]))
+
+        uid, mc_address, working_status, activation_status, _, \
+        first_name, second_name, registration_date, phone, email, boxes_id = c.fetchall()[0]
+        c.execute(" SELECT consumed_electricity "
+                  "FROM electricity_info "
+                  "WHERE boxes_id_uid={} ".format(boxes_id))
+        consumed_electricity = [float(val[0]) for val in c.fetchall()]
+        c.close()
+        conn.close()
+
+    except Exception as e:
+        logger.error(msg='Cannot execute /user_login {}'.format(e))
+        return str(e)
+
+    user = User()
+    user.id = login
+    login_user(user)
+    return redirect(url_for('welcome'))
 
 @app.route('/session_test/')
 def session_test():
