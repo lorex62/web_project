@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from flask import Flask, make_response, request, session, render_template, abort
-from flask_login import LoginManager, login_user, current_user, login_required
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from data import db_session
 from data.users import User
 from data.new_from import NewsForm
@@ -32,6 +32,11 @@ def load_user(user_id):
     session = db_session.create_session()
     return session.query(User).get(user_id)
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
