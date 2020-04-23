@@ -11,21 +11,23 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-light bg-light" >
         {% if current_user.is_authenticated %}
-    <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+    <p align="right"><a class="navbar-brand" href="/logout">{{ current_user.name }}</a></p>
 {% else %}
     <p>
         <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
         <a class="btn btn-success" href="/login">Войти</a>
     </p>
 {% endif %}
-        <a class="navbar-brand" href="#">Наше приложение</a>
+        <a class="navbar-brand" href="#"><h1 color="red">Марина</h1></a>
+
     </nav>
 </header>
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
+Прива
 </body>
 </html>

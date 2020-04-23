@@ -1,10 +1,11 @@
 from django.shortcuts import redirect
 from flask import Flask, make_response, request, session, render_template
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, current_user
 from data import db_session
 from data.users import User
 import datetime
 from loginform import LoginForm
+from data.news import News
 
 
 
@@ -28,6 +29,11 @@ def index():
     # session.add(user)
     # session.commit()
     # чтобы добавить пользователя, достаточно раскомментировать этот код и закомментировать строчку выше
+    if current_user.is_authenticated:
+        news = session.query(News).filter(
+            (News.user == current_user) | (News.is_private != True))
+    else:
+        news = session.query(News).filter(News.is_private != True)
     return render_template('base.html')
 
 @login_manager.user_loader
