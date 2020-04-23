@@ -15,6 +15,7 @@ from data import news_api, user_api
 
 db_session.global_init("db/users.sqlite")
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 
@@ -163,12 +164,12 @@ def session_test():
         return 'вы посетили сайт более 6 раз, нам пох'
     return f"Вы посетили данный сайт {session['visits_count']} раз"
 
-def main():
+'''def main():
     app.register_blueprint(user_api.blueprint)
     app.register_blueprint(news_api.blueprint)
-    app.run()
+    app.run()'''
 
 
 if __name__ == '__main__':
-    main()
-    ## app.run(port="8080", host='127.0.0.1')
+    # main()
+    app.run(port="8080", host='127.0.0.1')
