@@ -5,6 +5,7 @@ from data import db_session
 from data.users import User
 from data.new_from import NewsForm
 import datetime
+from werkzeug.utils import redirect
 from loginform import LoginForm
 from registerform import RegisterForm
 from data.news import News
@@ -51,7 +52,7 @@ def login():
         user = session.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/login")
+            return redirect('/')
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
