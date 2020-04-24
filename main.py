@@ -126,6 +126,49 @@ def add_news():
     return render_template('news.html', title='Добавление новости',
                            form=form)
 
+@app.route('/news/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_news(id):
+    form = NewsForm()
+    if request.method == "GET":
+        session = db_session.create_session()
+        news = session.query(News).filter(News.id == id,
+                                          (News.user == current_user) |
+                                          (current_user.id == 1)).first()
+        if news:
+            form.title.data = news.title
+            form.content.data = news.content
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        news = session.query(News).filter(News.id == id,
+                                          (News.user == current_user) |
+                                          (current_user.id == 1)).first()
+        if news:
+            news.title = form.title.data
+            news.content = form.content.data
+            session.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('news.html', title='Редактирование новости', form=form)
+
+@app.route('/news_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def news_delete(id):
+    session = db_session.create_session()
+    news = session.query(News).filter(News.id == id,
+                                      (News.user == current_user) |
+                                      (current_user.id == 1)).first()
+    if news:
+        session.delete(news)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
+
 '''def main():
     app.register_blueprint(user_api.blueprint)
     app.register_blueprint(news_api.blueprint)

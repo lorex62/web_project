@@ -2,9 +2,6 @@
 
 {% block content %}
 <h1>Предложения</h1>
-<form enctype="multipart/form-data" method="post">
-   <p><input type="file" multiple name="f" accept='image/*,video/*'>
-       <input type="submit" value="Отправить"></p>
 {% for item in news%}
 <div class="col-md6 border rounded">
     <h2>{{item.title}}</h2>
@@ -18,6 +15,11 @@
     <div>
         <a href="/news/{{ item.id }}" class="btn btn-warning">Изменить</a>
         <a href="/news_delete/{{ item.id }}" class="btn btn-danger">Удалить</a>
+    </div>
+    {% else %}
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <a href="/" class="a.button11">Купить</a>
+<div>
     </div>
 {% endif %}
 </div>

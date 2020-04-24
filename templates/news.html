@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Добавление новости</h1>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {{ form.csrf_token }}
     <p>
@@ -23,7 +23,10 @@
             </p>
         {% endfor %}
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+   <p><input type="file" multiple name="f" accept='image/*,video/*' data-target="/static/img"></p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary", value="Добавить") }}</p>
     {{message}}
+
 </form>
+<h1>Добавление магазина</h1>
 {% endblock %}
