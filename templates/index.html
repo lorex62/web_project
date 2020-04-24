@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<title>Мариночка</title>
 <h1>Предложения</h1>
 {% for item in news%}
 <div class="col-md6 border rounded">
@@ -11,16 +12,20 @@
     <div>
         Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
     </div>
-    {% if current_user.is_authenticated and current_user == item.user %}
+    {% if current_user.is_authenticated %}
+    {% if current_user == item.user %}
+        <div>
+            <a href="/news/{{ item.id }}" class="btn btn-warning">Изменить</a>
+            <a href="/news_delete/{{ item.id }}" class="btn btn-danger">Удалить</a>
+        </div>
+        {% else %}
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <a href="/" class="a.button11">Купить</a>
     <div>
-        <a href="/news/{{ item.id }}" class="btn btn-warning">Изменить</a>
-        <a href="/news_delete/{{ item.id }}" class="btn btn-danger">Удалить</a>
-    </div>
+        </div>
+    {% endif %}
     {% else %}
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <a href="/" class="a.button11">Купить</a>
-<div>
-    </div>
+    <a href="/login">Для покупки нужно авторизоваться</a>
 {% endif %}
 </div>
 {% endfor %}
